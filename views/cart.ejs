@@ -1,0 +1,85 @@
+<% include header %>
+
+    <!-- Page Content -->
+    <div class="container" style="margin-top:100px;" ng-app="MarketcloudExpressStarter" ng-controller="CartController" >
+
+        <div class="row" ng-cloak ng-show="cart.items.length > 0">
+
+            <div class="col-lg-8 col-lg-offset-2">
+                <h3>Shopping cart</h3>
+                <p>You have {{cart.items.length}} items in your cart.</p>
+                <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th colspan="2">Product</th>
+                    <th>Quantity</th>
+                    <th>Unit price</th>
+                    <th colspan="2">Total</th>
+                  </tr>
+                </thead>
+                <tbody>   
+                  <tr ng-repeat="item in cart.items"> 
+                    <td><a href="detail.html"><img src="{{item.images[0]}}" alt="{{ item.name }}" style="width:32px;"></a></td>
+                    <td><a href="detail.html">{{item.name}}</a></td>
+                    <td><input type="number" ng-model="item.quantity" class="form-control"></td>
+                    <td>{{ item.price }}</td>
+                    <td>$0.00</td>
+                    <td>{{::(item.price * item.quantity)}}</td>
+                    <td><a href="#" class="btn btn-danger" ng-click="removeFromCart(item.product_id,item.variant_id)"><i class="fa fa-trash-o"></i></a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <button class="btn btn-primary" ng-click="updateCart()">Update cart</button>
+                </div>
+                <div class="col-lg-4">
+                    <a href="/checkout" class="btn btn-success">Checkout</a>
+                </div>
+               
+            </div>
+
+                
+                
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+    <div class="container">
+
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Your Website 2014</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <div id="cart_data" class="hide"><%= JSON.stringify(cart) %></div>
+    <!-- /.container -->
+    <script src="/components/angular/angular.min.js"></script>
+    
+    <!-- jQuery -->
+    <script src="/components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/components/marketcloud-js/dist/marketcloud.min.js"></script>
+    <script type="text/javascript" src="js/item.js">
+        
+    </script>
+    <script type="text/javascript" src="/components/notie/notie.js"></script>
+
+</body>
+
+</html>
