@@ -61,7 +61,7 @@ router.get('/checkout',function(req,res){
   .reduce(function(a,b){
     return a+b;
   });
-  console.log("TOTAL CART VALUE",total_value)
+  
   mc.shippings.list({value : total_value})
   .then(function(response){
     res.render('checkout',{shippings : response})
@@ -83,9 +83,6 @@ router.get('/cart',function(req,res){
 
 
 router.get('/search',function(req,res){
-	// Try to breathe try not to breathe
-	// 
-	
 
 	var mc = req.app.get('marketcloud')
 	Marketcloud.Promise.all([

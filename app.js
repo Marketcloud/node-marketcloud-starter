@@ -15,11 +15,16 @@ var app = express();
 
 var Marketcloud = require('marketcloud-node');
 
+if ('undefined' === typeof process.env.MARKETCLOUD_PUBLIC_KEY ||
+    'undefined' === typeof process.env.MARKETCLOUD_SECRET_KEY) {
+    throw new Error("Unable to find keys in ENV. Please set MARKETCLOUD_PUBLIC_KEY and MARKETCLOUD_SECRET_KEY in your environment.");
+}
+
 var mc = new Marketcloud.Client({
     public_key : process.env.MARKETCLOUD_PUBLIC_KEY,
     secret_key : process.env.MARKETCLOUD_SECRET_KEY
 })
-console.log("STARTING MARKETCLOUD WITH PKEY "+process.env.MARKETCLOUD_PUBLIC_KEY)
+
 app.set('marketcloud',mc);
 
 
@@ -67,11 +72,9 @@ app.use(function(req,res,next){
 
     var getCartPromise = function(){
         if (req.session.hasOwnProperty('cart_id')){
-        console.log("Cart recovered")
             return req.app.get('marketcloud').carts.getById(req.session.cart_id)
         }
         else{
-            console.log("No cart was found, creating one.")
             return req.app.get('marketcloud').carts.create()
         }
     }
@@ -84,7 +87,7 @@ app.use(function(req,res,next){
     })  
     .catch(function(response){
 
-        console.log("Un errore nel recuperare un carrello")
+        console.log("Unable to create or retrieve a cart.")
         next(response)
     })
     
