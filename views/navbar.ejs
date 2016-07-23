@@ -35,9 +35,11 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
        <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
+        <li class="dropdown hidden-xs hidden-sm ">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="glyphicon glyphicon-shopping-cart"></span><%= cart.items.length; %> Cart<span class="caret"></span></a>
           <ul class="dropdown-menu dropdown-cart" role="menu">
+            <li><b class="block text-center">Your cart</b></li>
+            <li class="divider"></li>
             <% if (cart.items.length === 0) { %>
               <li>Your cart is still empty :(</li>
             <% } %>
@@ -56,9 +58,9 @@
                             <span>x <%= item.quantity; %></span>
                         </span>
                     </span>
-                    <span class="item-right">
+                   <!--  <span class="item-right">
                         <button class="btn btn-xs btn-danger pull-right">x</button>
-                    </span>
+                    </span> -->
                 </span>
               </li>
               <% } %>
@@ -67,6 +69,11 @@
               <li class="divider"></li>
               <li><a class="text-center" href="/cart">View Cart</a></li>
           </ul>
+        </li>
+        <li class="hidden-lg hidden-md">
+          <a href="/cart">
+            <span class="glyphicon glyphicon-shopping-cart"></span> <%= cart.items.length; %> Cart</span>
+          </a>
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->

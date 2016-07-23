@@ -5,34 +5,46 @@
 
         <div class="row">
 
-            <div class="col-md-3 sidenav">
+            <div class=" col-xs-12 col-md-3 sidenav">
 
-                <div class="group">
-                    <div class="group-title">Categories</div>
-                    <% for (var i =0; i< categories.length;i++) { %>
-                        <div><a href="/search?category_id=<%= categories[i].id %>" class="group-item"><%= categories[i].name %></a></div>
-                    <% } %>
-                </div>
-                
-                
-                
-                    <div class="group">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-12 col-lg-12">
+                            
+                            <div class="group">
+                                <div class="group-title">Categories</div>
+                                <% for (var i =0; i< categories.length;i++) { %>
+                                    <div class="group-item">
+                                        <a href="/search?category_id=<%= categories[i].id %>" ><%= categories[i].name %></a>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-lg-12">
+                             <div class="group">
 
-                    <div class="group-title">Brands</div>
-                    <% for (var i =0; i< brands.length;i++) { %>
-                        <div><a href="/search?brand_id=<%= brands[i].id %>" class="group-item"><%= brands[i].name %></a></div>
-                    <% } %>
+                                <div class="group-title">Brands</div>
+                                <% for (var i =0; i< brands.length;i++) { %>
+                                    <div  class="group-item"><a href="/search?brand_id=<%= brands[i].id %>"><%= brands[i].name %></a></div>
+                                <% } %>
+                            </div>
+
+                        </div>
                     </div>
+                
+                
+                
+                
+                   
                 
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-9 col-xs-12 ">
 
           
                 <div class="row">
 
                 <% for (var i =0; i<products.length;i++) { %>
-                    <div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="col-sm-4 col-lg-4 col-md-4 col-xs-12">
                         <a class="product" href="/item/<%= products[i].id %>">
                            <% if (products[i].hasOwnProperty('images')) { %>
                              <div class="image" style="background-image:url(<%= products[i].images[0] %>)">

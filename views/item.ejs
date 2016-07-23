@@ -15,13 +15,22 @@
                             <img src="<%= product.images[0] %>" alt="" style="max-width:100%;">
                             <% } else {%>
                                 <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=200%C3%97200&w=400&h=800" alt="" style="max-width:100%;">
-                            <% } %>
+                    <% } %>
+                </div>
+                <div class="product-thumbnails row">
+                    <% for (var i=0; i< product.images.length; i++) { %>
+                    <div class="col-xs-4">
+                        <div class="thumbnail">
+                            <img src="<%= product.images[i] %>" alt="" style="max-width:100%;">
+                        </div>
+                    </div>
+                    <% } %>
                 </div>
             </div>
 
             <div class="col-md-4">
 
-                <div class="thumbnail">
+                <div class="product-controls">
                     <h3 class="price text-center">€ <%= product.price %></h3>
                     <% for(var k in product.variantsDefinition) { %>
                         <div><b><%= k %></b></div>
@@ -36,25 +45,7 @@
                     <button class="btn btn-block btn-success" id="addToCartButton">Add to cart</button>
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table">
-                    <thead>
-                        <tr><th>Attribute</th><th>Value</th></tr>
-                    </thead>
-                    <tbody>
-                        <% for (var k in product) { 
-                            var unwanted = [
-                            'id', 'product_id', 'stock_type', 'stock_level', 'variant_id', 'display_price','price','name'
-                            ]
-                            if ('object' !== typeof product[k] && unwanted.indexOf(k) < 0) {
-                        %>
-                        <tr><td><%= k %></td><td><%= product[k] %></td></tr>
-                        <% }
-                        }
-                        %>
-                        </tbody>
-                    </table>
-                </div>
+                
                 
 
             </div>
@@ -73,7 +64,21 @@
             <div class="col-md-4">
                 <div class="table-responsive">
                     <table class="table">
-                        
+                    <thead>
+                        <tr><th>Attribute</th><th>Value</th></tr>
+                    </thead>
+                    <tbody>
+                        <% for (var k in product) { 
+                            var unwanted = [
+                            'id', 'product_id', 'stock_type', 'stock_level', 'variant_id', 'display_price','price','name'
+                            ]
+                            if ('object' !== typeof product[k] && unwanted.indexOf(k) < 0) {
+                        %>
+                        <tr><td><%= k %></td><td><%= product[k] %></td></tr>
+                        <% }
+                        }
+                        %>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -100,9 +105,7 @@
         btn.attr("disabled","disabled")
 
         btn.html("Adding to cart")
-        //Se il prodotto ha delle varianti, vado a prendere
-        //nel DOM quali varianti sono state selezionate
-        //così da mandarle al server assieme al prodotto
+        
         if (product.has_variants) {
             
             payload.options = {};
@@ -115,13 +118,15 @@
 
         
         
-        // Chiamata al backend
+        
         marketcloud.carts.add(cart.id, [payload], function(err, data) {
             if (err) {
                 console.log(err)
                 alert("An error has occurred");
-            } else
+            } else{
+                alert("Item added to cart")
                 location.reload()
+            }
         })
     }
 
@@ -131,6 +136,4 @@
     })
 
 </script>
-</body>
-
-</html>
+<% include footer %>
