@@ -8,6 +8,6 @@
   ],
   "dependencies": {
     "bootstrap": "^3.3.6",
-    "marketcloud-js": "^1.0.4"
+    "marketcloud-js": "1.1.1"
   }
 }
