@@ -25,6 +25,8 @@ var mc = new Marketcloud.Client({
     secret_key : process.env.MARKETCLOUD_SECRET_KEY
 })
 
+app.locals.MARKETCLOUD_PUBLIC_KEY = process.env.MARKETCLOUD_PUBLIC_KEY;
+
 app.set('marketcloud',mc);
 
 
@@ -111,9 +113,7 @@ app.use('/', routes);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+    res.render(404);
 });
 
 /// error handlers

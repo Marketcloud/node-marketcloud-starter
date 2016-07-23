@@ -1,195 +1,333 @@
 <% include header %>
 
-    <!-- Page Content -->
-    <div class="container" style="margin-top:100px;" ng-app="MarketcloudExpressStarter" ng-controller="CheckoutController" >
-    <div class="row" style="margin-bottom:20px;">
-    	<div class="col-lg-6">
-    		<button class="btn btn-success" ng-click="printScope()">Test Scope</button><br/>
-    	</div>
-    </div>
 
-    <div class="row">
-    <div class="col-lg-4 col-md-6">
-    	
-    <div class="panel panel-primary">
-    	<div class="panel-heading">Name and address</div>
-    	<div class="panel-body">
-
-    	
-    	<div class="form">
-    	<div class="form-group">
-    			<label>Email address</label>
-    			<input type="email"
-    					class="form-control"
-    					name="email"
-    					placeholder="john.doe@example.com"
-    					ng-model="address.email">
-    		</div>
-    		<div class="form-group">
-    			<label>Full name</label>
-    			<input type="text"
-    			class="form-control"
-    			name="full_name"
-    			placeholder="John Doe"
-    			ng-model="address.full_name">
-    		</div>
-    	
-    		<div class="form-group">
-    			<label>Address</label>
-    			<input type="text"
-    					class="form-control"
-    					name="address"
-    					placeholder="Fake Street 123"
-    					ng-model="address.address1">
-    		</div>
-
-    		<div class="row">
-	    		<div class="form-group col-xs-6">
-	    			<label>Country</label>
-	    			<input type="text" class="form-control" name="country" placeholder="Italy" ng-model="address.country">
-	    		</div>
-	    		<div class="form-group col-xs-6">
-	    			<label>State/Province</label>
-	    			<input type="text" class="form-control" name="state" placeholder="Marche" ng-model="address.state">
-	    		</div>
-    		</div>
-    		<div class="row">
-	    		<div class="form-group col-xs-6">
-	    			<label>City</label>
-	    			<input type="text" class="form-control" name="city" placeholder="Rome" ng-model="address.city">
-	    		</div>
-	    		<div class="form-group col-xs-6">
-	    			<label>ZIP / Postal code</label>
-	    			<input type="text" class="form-control" name="postal_code" ng-model="address.postal_code">
-	    		</div>
-    		</div>
-    		<div class="chekbox">
-    			<label>
-    				<input type="checkbox" name="ship_to_this_address"> Ship to this address
-    			</label>
-    		</div>
-  
-    	</div>
-    	</div>
-    	</div>
-    </div>
-    <div class="col-lg-4 col-md-6">
-     <div class="panel panel-primary">
-    	<div class="panel-heading">Order review</div>
-    	<div class="panel-body">
-    		<div class="table-responsive">
-    			<table class="table">
-                <thead>
-                  <tr>
-                    <th colspan="2">Product</th>
-                    <th>Quantity</th>
-                    <th>Unit price</th>
-                  </tr>
-                </thead>
-                <tbody>   
-                	<% for (var i=0; i< cart.items.length; i++ ) {
-                	 var item = cart.items[i];
-                	%>
-                  <tr> 
-                    <td><a href="detail.html">
-                    	<% if (item.hasOwnProperty('images')) { %>
-                            <img src="<%= item.images[0] %>" alt="" style="max-width:100%;max-height:64px;">
-                            <% } else {%>
-                                <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=200%C3%97200&w=400&h=800" alt="" style="max-width:100%;max-height:64px;">
-                            <% } %>
-                    </a></td>
-                    <td><a href="detail.html"><%= item.name %></a></td>
-                    <td><%= item.quantity %></td>
-                    <td><%=  item.price  %></td>
-                    
-                  </tr>
-                  <% } %>
-                </tbody>
-              </table>
-    	</div>
-
-    	</div>
-    </div>
-    	
-    	    </div>
-    <div class="col-lg-4 col-md-6">
-    <div class="panel panel-primary">
-    	<div class="panel-heading">Shipping method</div>
-    	<div class="panel-body">
-    		<% for (var i=0; i< shippings.length; i++ ) {
-                	 var item = shippings[i];
-        %>
-        <div class="radio">
-		  <label>
-		    <input type="radio"
-		    	name="shippingMethod" 
-		    	id="shippingMethod<%= i %>" 
-		    	value="<%= item.id %>"
-		    	ng-model="selected_shipping_method_id">
-		    <%= item.name %> <b> + $ <%= item.base_cost  %></b>
-		  </label>
-		  <div></div>
-		</div>
-        <% } %>
-    	</div>
-    </div>
-    <div class="panel panel-primary">
-    	<div class="panel-heading">Payment method</div>
-    	<div class="panel-body">
-
-<form id="checkout" class="form">
-  <div id="payment-form"></div>
-  <input type="submit" class="btn btn-lg btn-primary" value="Confirm checkout">
-</form>
-
-    	</div>
-    </div>
-    	
+<div class="container-fluid" >
     
-
-
-</div>
-<script src="https://js.braintreegateway.com/js/braintree-2.24.1.min.js"></script>
-<script>
-
-</script>
+    <% if ('undefined' !== typeof error_message){ %>
+    <div class="row" style="margin-top:100px;">
+        
+        <div class="col-xs-12">
+            <div class="alert alert-danger"><%= error_message; %></div>
+        </div>
     </div>
-    </div>
-
-
-
-
-
-
-
-
-    <div class="container">
-
-        <hr>
-
-        <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
+    <% } %>
+    <div class="row" style="margin-top:100px;">
+        <div class="col-lg-4 col-md-6">
+            
+            <div class="panel panel-warning">
+                <div class="panel-heading">Name and address</div>
+                <div class="panel-body">
+                    
+                    <div class="form">
+                        <div class="form-group">
+                            <label>Email address</label>
+                            <input type="email"
+                            class="form-control"
+                            name="email_address"
+                            placeholder="john.doe@example.com"
+                            id="address_email">
+                        </div>
+                        <div class="form-group">
+                            <label>Full name</label>
+                            <input type="text"
+                            class="form-control"
+                            name="full_name"
+                            placeholder="John Doe"
+                            id="address_full_name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input type="text"
+                            class="form-control"
+                            name="address"
+                            placeholder="Fake Street 123"
+                            id="address_address1">
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-6">
+                                <label>Country</label>
+                                <input type="text" class="form-control" name="country" placeholder="Italy" id="address_country">
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label>State/Province</label>
+                                <input type="text" class="form-control" name="state" placeholder="Marche" id="address_state">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-6">
+                                <label>City</label>
+                                <input type="text" class="form-control" name="city" placeholder="Rome" id="address_city">
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label>ZIP / Postal code</label>
+                                <input type="text" class="form-control" name="postal_code" id="address_postal_code">
+                            </div>
+                        </div>
+                        <div class="chekbox">
+                            <label>
+                                <input type="checkbox" name="ship_to_this_address"> Ship to this address
+                            </label>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
-        </footer>
-
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="panel panel-warning">
+                <div class="panel-heading">Order review</div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Product</th>
+                                    <th>Qty</th>
+                                    <th>Unit price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                <% for (var i =0; i< cart.items.length; i++) {
+                                    var item = cart.items[i];
+                                %>
+                                    <tr>
+                                    <td><a href="detail.html">
+                                        <% if (item.images){ %>
+                                        <img src="<%= item.images[0]; %>" alt="" style="max-width:100%;max-height:64px;">
+                                        <% } else{ %>
+                                        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=200%C3%97200&w=400&h=800" alt="" style="max-width:100%;max-height:64px;">
+                                        <% } %>
+                                    </a></td>
+                                    <td><a href="detail.html"><%= item.name; %></a></td>
+                                    <td><%= item.quantity; %></td>
+                                    <td><%=  item.price;  %></td>
+                                    
+                                </tr>
+                                <% }; %>
+                               
+                                
+                             
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="panel panel-warning">
+                <div class="panel-heading">Shipping method</div>
+                <div class="panel-body">
+                    <% for (var i =0; i< shippings.length; i++) {
+                        
+                        var shipping = shippings[i];
+                    %>
+                    <div class="radio">
+                        <label>
+                            <input type="radio"
+                            name="shippingMethod"
+                            value="<%= shipping.id; %>"
+                            id="selected_shipping_method_id">
+                            <%= shipping.name; %> <b> + $ <%= shipping.base_cost;  %></b>
+                        </label>
+                        <div></div>
+                    </div>
+                    <% }; %>
+                </div>
+            </div>
+            <div class="panel panel-warning">
+                <div class="panel-heading">Payment informations</div>
+                <div class="panel-body">
+                   
+                        <form id="checkout" class="form">
+                          <div id="payment-form"></div>
+                         <input type="submit" id="braintree_button" class="btn btn-lg btn-primary" value="Complete checkout" disabled="">
+                        </form>
+            </div>
+            
+            
+        </div>
+        
+        <script>
+        </script>
     </div>
-    <!-- /.container -->
-    <script src="/components/angular/angular.min.js"></script>
+</div>
+</div>
+
+<script src="https://js.braintreegateway.com/js/braintree-2.26.0.min.js"></script>
+<% include scripts %>
+<script type="text/javascript">
+    /*
     
-    <!-- jQuery -->
-    <script src="/components/jquery/dist/jquery.min.js"></script>
+        Usiamo il checkout with Paypal,
+        sempre parte di Braintree
+        con Marketcloud.
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/components/marketcloud-js/dist/marketcloud.min.js"></script>
-    <div id="cart_data" class="hide"><%= JSON.stringify(cart) %></div>
-    <script src="/js/item.js"></script>
-    <script type="text/javascript" src="/components/notie/notie.js"></script>
+        Guida braintree paypal Client Side
+        https://developers.braintreepayments.com/guides/paypal/checkout-with-paypal/javascript/v2
+        
+        Guida Braintree paypal Server side (Inutile se usi Marketcloud)
+        https://developers.braintreepayments.com/guides/paypal/server-side/php
 
-</body>
+    */
 
-</html>
+   
+
+   // Il server mi passa alcuni oggetti utili
+    
+    var cart_id = <%= cart.id %>;
+
+    //Inizializzo alcuni valori che mi serviranno per Braintree
+    var braintree_nonce = null;
+    var braintree_client_token = null;
+
+
+
+    function loadClientToken() {
+
+        // Utility di marketcloud
+        marketcloud.payments.braintree.createClientToken(function(err,data){
+            if (err) {
+                return alert("An error has occurred")
+            } else {
+                braintree_client_token = data.clientToken;
+                
+                
+                // Usa questo setup se vuoi il form 
+                // preconfezionato di Braintree (la Drop-in UI)
+                 /*braintree.setup(braintree_client_token, "dropin", {
+                  container: "payment-form",
+                  onPaymentMethodReceived: function (bt_nonce) {
+                            alert("Payment method received ora checkout");
+                            $("#braintree_button").removeAttr("disabled")
+                            braintree_nonce = bt_nonce;
+                            checkout();
+                        }
+                });*/
+               /* braintree.setup(data.clientToken, 'custom', {
+                  paypal: {
+                    container: "payment-form",
+                    singleUse: true, // Required
+                    amount: 10.00, // Required, va calcolato di caso in caso! qui è un valore di esempio
+                    currency: 'EUR', // Required
+                    locale: 'en_us'
+                  },
+                  onPaymentMethodReceived: function (bt_nonce) {
+                            braintree_nonce = bt_nonce;
+                            //Chiamiamo la funzione di checkout
+                            checkout();
+                  }
+                });*/
+             braintree.setup(data.clientToken, 'custom', {
+  paypal: {
+    container: 'payment-form',
+    singleUse: true, // Required
+    amount: 10.00, // Required
+    currency: 'USD', // Required
+    locale: 'en_us',
+    enableShippingAddress: true,
+    shippingAddressOverride: {
+      recipientName: 'Scruff McGruff',
+      streetAddress: '1234 Main St.',
+      extendedAddress: 'Unit 1',
+      locality: 'Chicago',
+      countryCodeAlpha2: 'US',
+      postalCode: '60652',
+      region: 'IL',
+      phone: '123.456.7890',
+      editable: false
+    }
+  },
+                  onPaymentMethodReceived: function (bt_nonce) {
+                            braintree_nonce = bt_nonce;
+                            //Chiamiamo la funzione di checkout
+                            checkout();
+                  }
+                });
+            }
+        })
+
+        
+    }
+
+    // Al document.ready abbiamo bisogno di caricare il client token
+    // questo ci permette di inizializzare Braintree lato client
+    // 
+    // Sembra una complicazione, e lo è, ma aggiunge un layer di sicurezza
+    // Altri metodi di pagamento, come ad esempio Stripe, non richiedono questo step
+    loadClientToken()
+
+
+
+    function validateAddress() {
+
+        var address = {
+            email : $("#address_email").val(),
+            full_name : $("#address_full_name").val(),
+            country : $("#address_country").val(),
+            city : $("#address_city").val(),
+            address1 : $("#address_address1").val(),
+            state : $("#address_state").val(),
+            postal_code : $("#address_postal_code").val(),
+        }
+
+        return true;
+    }
+
+
+    function validateCardInformation() {
+        return true;
+    }
+
+    function validateShippingMethod() {
+        var shippingMethod = $("input[name='shippingMethod']").val();
+        return true;
+    }
+
+
+    function checkout() {
+
+        alert("Checkpout")
+
+        if (!validateAddress())
+            return alert("Invalid address");
+
+        if (!validateCardInformation())
+            return alert("Invalid card");
+
+        if (!validateShippingMethod())
+            return alert("Invalid shippingMethod");
+
+        var the_address = {
+            email : $("#address_email").val(),
+            full_name : $("#address_full_name").val(),
+            country : $("#address_country").val(),
+            city : $("#address_city").val(),
+            address1 : $("#address_address1").val(),
+            state : $("#address_state").val(),
+            postal_code : $("#address_postal_code").val(),
+        };
+        
+        var order = {
+            shipping_address : the_address,
+            billing_address : the_address,
+            cart_id : cart_id,
+            shipping_id : $("input[name='shippingMethod']").val()
+        }
+        
+            var form = $("<form method='POST' action='/checkout.php'></form>");
+            var order_field = $("<input type='hidden' name='order'/>");
+            order_field.val(JSON.stringify(order));
+            form.append(order_field);
+            var nonce_field = $("<input type='hidden' name='braintree_nonce'/>");
+            nonce_field.val(JSON.stringify(braintree_nonce));
+            form.append(nonce_field);
+            form.submit();
+
+ }
+    
+</script>
+
+<% include footer %>

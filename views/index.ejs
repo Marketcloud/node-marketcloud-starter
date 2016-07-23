@@ -5,19 +5,25 @@
 
         <div class="row">
 
-            <div class="col-md-3">
-                <p class="lead">Categories</p>
-                <div class="list-group">
-                <% for (var i =0; i<categories.length;i++) { %>
-                    <a href="/search?category_id=<%= categories[i].id %>" class="list-group-item"><%= categories[i].name %></a>
-                <% } %>
+            <div class="col-md-3 sidenav">
+
+                <div class="group">
+                    <div class="group-title">Categories</div>
+                    <% for (var i =0; i< categories.length;i++) { %>
+                        <div><a href="/search?category_id=<%= categories[i].id %>" class="group-item"><%= categories[i].name %></a></div>
+                    <% } %>
                 </div>
-                <p class="lead">Brands</p>
-                <div class="list-group">
-                <% for (var i =0; i<brands.length;i++) { %>
-                    <a href="/search?brand_id=<%= brands[i].id %>" class="list-group-item"><%= brands[i].name %></a>
-                <% } %>
-                </div>
+                
+                
+                
+                    <div class="group">
+
+                    <div class="group-title">Brands</div>
+                    <% for (var i =0; i< brands.length;i++) { %>
+                        <div><a href="/search?brand_id=<%= brands[i].id %>" class="group-item"><%= brands[i].name %></a></div>
+                    <% } %>
+                    </div>
+                
             </div>
 
             <div class="col-md-9">
@@ -27,25 +33,20 @@
 
                 <% for (var i =0; i<products.length;i++) { %>
                     <div class="col-sm-4 col-lg-4 col-md-4">
-                        <a class="thumbnail product" href="/item/<%= products[i].id %>">
+                        <a class="product" href="/item/<%= products[i].id %>">
                            <% if (products[i].hasOwnProperty('images')) { %>
-                             <div class="product_image" style="background-image:url(<%= products[i].images[0] %>)">
+                             <div class="image" style="background-image:url(<%= products[i].images[0] %>)">
                              </div>
                             <% } else {%>
-                             <div class="product_image" style="background-image:url(https://placeholdit.imgix.net/~text?txtsize=33&txt=200%C3%97200&w=600&h=600)">
+                             <div class="image" style="background-image:url(https://placeholdit.imgix.net/~text?txtsize=33&txt=200%C3%97200&w=600&h=600)">
                                 </div>  
                            
                             <% } %>
 
-                            <!-- <div class="caption">
-                                <div class="pull-right product_price">$<%= products[i].price %></div>
-                                <div class="product_name"><a href="/item/<%= products[i].id %>"><%= products[i].name %></a>
-                                </div>
-                            </div> -->
-                            <div class="text-center">
-                                    <p><div class="product_name"><%= products[i].name %></div></p>
-                                    <p>€ <%= products[i].price %></p>
-                                </div>
+                            <div class="info row">
+                                    <div class="col-xs-8 name"><%= products[i].name %></div>
+                                    <div class="col-xs-4 price text-right">€ <%= products[i].price %></div>
+                            </div>
                         </a>
                     </div>
                     <% } %>
@@ -62,28 +63,6 @@
     </div>
     <!-- /.container -->
 
-    <div class="container">
-
-        <hr>
-
-        <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
-                </div>
-            </div>
-        </footer>
-
-    </div>
-    <!-- /.container -->
-
-    <!-- jQuery -->
-    <script src="/components/jquery/dist/jquery.min.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-</body>
-
-</html>
+   
+    <% include scripts %>
+    <% include footer %>
