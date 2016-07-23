@@ -161,33 +161,33 @@
 <script type="text/javascript">
     /*
     
-        Usiamo il checkout with Paypal,
-        sempre parte di Braintree
-        con Marketcloud.
+        For this starter, we use Braintree
+        as payment method.
 
-        Guida braintree paypal Client Side
+
+
+        Braintree paypal Client Side guide
         https://developers.braintreepayments.com/guides/paypal/checkout-with-paypal/javascript/v2
-        
-        Guida Braintree paypal Server side (Inutile se usi Marketcloud)
-        https://developers.braintreepayments.com/guides/paypal/server-side/php
 
     */
 
    
 
-   // Il server mi passa alcuni oggetti utili
-    
+   
+    // The cart id!
     var cart_id = <%= cart.id %>;
 
-    //Inizializzo alcuni valori che mi serviranno per Braintree
+    // This will hold the nonce returned by braintree
     var braintree_nonce = null;
+
+    // This will hold the client token returned by Marketcloud
     var braintree_client_token = null;
 
 
 
     function loadClientToken() {
 
-        // Utility di marketcloud
+        // 
         marketcloud.payments.braintree.createClientToken(function(err,data){
             if (err) {
                 return alert("An error has occurred")
@@ -195,68 +195,23 @@
                 braintree_client_token = data.clientToken;
                 
                 
-                // Usa questo setup se vuoi il form 
-                // preconfezionato di Braintree (la Drop-in UI)
-                 /*braintree.setup(braintree_client_token, "dropin", {
+                // In this example, we use braintree as payment method
+                // But you can replace it with Stripe or any other 
+                // payment method supported by Marketcloud
+                braintree.setup(braintree_client_token, "dropin", {
                   container: "payment-form",
                   onPaymentMethodReceived: function (bt_nonce) {
-                            alert("Payment method received ora checkout");
                             $("#braintree_button").removeAttr("disabled")
                             braintree_nonce = bt_nonce;
                             checkout();
                         }
-                });*/
-               /* braintree.setup(data.clientToken, 'custom', {
-                  paypal: {
-                    container: "payment-form",
-                    singleUse: true, // Required
-                    amount: 10.00, // Required, va calcolato di caso in caso! qui è un valore di esempio
-                    currency: 'EUR', // Required
-                    locale: 'en_us'
-                  },
-                  onPaymentMethodReceived: function (bt_nonce) {
-                            braintree_nonce = bt_nonce;
-                            //Chiamiamo la funzione di checkout
-                            checkout();
-                  }
-                });*/
-             braintree.setup(data.clientToken, 'custom', {
-  paypal: {
-    container: 'payment-form',
-    singleUse: true, // Required
-    amount: 10.00, // Required
-    currency: 'USD', // Required
-    locale: 'en_us',
-    enableShippingAddress: true,
-    shippingAddressOverride: {
-      recipientName: 'Scruff McGruff',
-      streetAddress: '1234 Main St.',
-      extendedAddress: 'Unit 1',
-      locality: 'Chicago',
-      countryCodeAlpha2: 'US',
-      postalCode: '60652',
-      region: 'IL',
-      phone: '123.456.7890',
-      editable: false
-    }
-  },
-                  onPaymentMethodReceived: function (bt_nonce) {
-                            braintree_nonce = bt_nonce;
-                            //Chiamiamo la funzione di checkout
-                            checkout();
-                  }
                 });
-            }
-        })
-
-        
+        }
+    })  
     }
 
-    // Al document.ready abbiamo bisogno di caricare il client token
-    // questo ci permette di inizializzare Braintree lato client
-    // 
-    // Sembra una complicazione, e lo è, ma aggiunge un layer di sicurezza
-    // Altri metodi di pagamento, come ad esempio Stripe, non richiedono questo step
+
+   //Retrieving Braintree client token
     loadClientToken()
 
 
@@ -289,7 +244,7 @@
 
     function checkout() {
 
-        alert("Checkpout")
+       
 
         if (!validateAddress())
             return alert("Invalid address");
@@ -317,7 +272,7 @@
             shipping_id : $("input[name='shippingMethod']").val()
         }
         
-            var form = $("<form method='POST' action='/checkout.php'></form>");
+            var form = $("<form method='POST' action='/checkout'></form>");
             var order_field = $("<input type='hidden' name='order'/>");
             order_field.val(JSON.stringify(order));
             form.append(order_field);
@@ -326,7 +281,7 @@
             form.append(nonce_field);
             form.submit();
 
- }
+    }
     
 </script>
 

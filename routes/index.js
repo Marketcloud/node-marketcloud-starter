@@ -54,6 +54,11 @@ router.get('/item/:product_id',function(req,res){
 router.get('/checkout',function(req,res){
   var mc = req.app.get('marketcloud');
   var cart = req.app.locals.cart;
+
+  //Short-circuiting to cart view
+  if (cart.items.length === 0)
+    return res.render('cart');
+
   var total_value = cart.items
   .map(function(x){
     return x.price*x.quantity;
