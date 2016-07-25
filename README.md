@@ -1,3 +1,4 @@
+![Marketcloud](http://www.marketcloud.it/img/logo_1200.png)
 # NodeJS + Marketcloud eCommerce starter
 NodeJS starter eCommerce project with ExpressJS and Marketcloud
 
@@ -9,3 +10,18 @@ NodeJS starter eCommerce project with ExpressJS and Marketcloud
 * Takes advantage of EJS templates
 * Boostrap3 based frontend plus some JQuery
 * Easily replace the small JQuery code with your favorite Javascript framework like React/Angular/Angular2
+
+## Requirements
+You will need nodejs, npm and bower
+
+## Installation
+
+Clone the respository to your local machine
+```
+cd to/the/directory/
+npm install && bower install
+```
+Now you can run the app with
+```
+npm start
+```
