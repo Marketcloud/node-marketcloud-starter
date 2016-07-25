@@ -24,6 +24,14 @@ Clone the respository to your local machine
 cd to/the/directory/
 npm install && bower install
 ```
+Every Marketcloud application has a pair of public and secret key that are used to make requests. To find your application's keys, go at https://www.marketcloud.it/applications click on the arrow at the right corner of your application's box and then click on _properties_ . Here you can see your app's keys.
+
+The app.js script look for these keys in your environment, so you have to set the variables in your system:
+```
+export MARKETCLOUD_PUBLIC_KEY="your-public-key";
+export MARKETCLOUD_SECRET_KEY="your-secret-key";
+```
+
 Now you can run the app with
 ```
 npm start
