@@ -7,7 +7,7 @@ var Marketcloud = require('marketcloud-node');
 
 /* GET home page. */
 
-router.get('/', function(req, res) {
+router.get('/', function(req,res,next) {
 
  var mc = req.app.get('marketcloud')
   
@@ -35,9 +35,9 @@ router.get('/', function(req, res) {
 });
 
 
-router.get('/item/:product_id',function(req,res){
+router.get('/item/:product_id',function(req,res,next){
 	var mc = req.app.get('marketcloud')
-	mc.products.getById(req.params.product_id)
+	return mc.products.getById(req.params.product_id)
 			.then(function(response){
 				res.render('item', {product : response});
 			})
@@ -51,7 +51,7 @@ router.get('/item/:product_id',function(req,res){
 })
 
 
-router.get('/checkout',function(req,res){
+router.get('/checkout',function(req,res,next){
   var mc = req.app.get('marketcloud');
   var cart = req.app.locals.cart;
 
@@ -67,7 +67,7 @@ router.get('/checkout',function(req,res){
     return a+b;
   });
   
-  mc.shippings.list({value : total_value})
+ return  mc.shippings.list({value : total_value})
   .then(function(response){
     res.render('checkout',{shippings : response})
   })
@@ -81,16 +81,27 @@ router.get('/checkout',function(req,res){
   
 })
 
-router.get('/cart',function(req,res){
+router.post('/checkout',function(req,res,next){
+  var mc = req.app.get('marketcloud');
+  return mc.orders.create(req.body)
+  .then(function(response){
+    res.send(response)
+  })
+  .catch(function(error){
+    res.send(error)
+  })
+})
+
+router.get('/cart',function(req,res,next){
 	var mc = req.app.get('marketcloud')
 	res.render('cart')
 })
 
 
-router.get('/search',function(req,res){
+router.get('/search',function(req,res,next){
 
 	var mc = req.app.get('marketcloud')
-	Marketcloud.Promise.all([
+	return Marketcloud.Promise.all([
   		mc.products.list(req.query),
   		mc.categories.list({}),
   		mc.brands.list({})
@@ -111,4 +122,57 @@ router.get('/search',function(req,res){
   })
 
 })
+
+
+
+router.get('/login',function(req,res,next){
+  res.render('login');
+})
+
+router.post('/login',function(req,res,next){
+  // If error, render the loging screen with an error message
+  
+
+  var mc = req.app.get('marketcloud');
+
+  return mc.users.authenticate(req.body.email,req.body.password)
+  .then(function(response){
+    console.log("THEN",response)
+    req.session.user = {
+      email : response.user.email,
+      id : response.user.id,
+      token : response.token
+    };
+    
+    res.redirect('/')
+  })
+  .catch(function(response){
+    console.log("CATCH",response)
+    res.render('login',{error : 'Invalid credentials'});
+  })
+})
+
+
+
+
+router.get('/signup',function(req,res,next){
+  res.render('signup');
+})
+
+router.post('/signup',function(req,res,next){
+  // If error, render the loging screen with an error message
+  var mc = req.app.get('marketcloud');
+  var user = req.body;
+  //You can add custom data to user
+  return mc.users.create(user)
+  .then(function(response){
+    console.log(response)
+    res.render('login',{message : 'Your account was successfully created.'})
+  })
+  .catch(function(response){
+
+    res.render('signup',{error : 'An error has occurred'})
+  })
+})
+
 module.exports = router;

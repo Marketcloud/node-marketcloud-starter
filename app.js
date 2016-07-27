@@ -70,6 +70,13 @@ app.use(express.static(path.join(__dirname, 'public/')));
 
 
 app.use(function(req,res,next){
+    if (req.session.user) {
+        req.app.locals.user = req.session.user;
+    }
+    next();
+})
+
+app.use(function(req,res,next){
 
 
     var getCartPromise = function(){
