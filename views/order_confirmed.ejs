@@ -1,0 +1,76 @@
+<% include header %>
+
+    <!-- Page Content -->
+    <div class="container" style="margin-top:100px;">
+    <div class="row">
+        <div class="col-xs-12 col-md-8 col-md-offset-2">
+            <h2>Thank you for your order!</h2>
+            <p class="lead">Here's a recap of the order's informations</p>
+        </div>
+    </div>
+   <div class="row">
+
+            <div class="col-lg-8 col-lg-offset-2">
+                <h3>Shopping cart</h3>
+                <p>You have <%= order.products.length; %> items in your cart.</p>
+                <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th colspan="2">Product</th>
+                    <th>Quantity</th>
+                    <th>Unit price</th>
+                    <th colspan="2">Total</th>
+                  </tr>
+                </thead>
+                <tbody>   
+                <% for ( var i=0; i< order.products.length; i++) {
+                    var item = order.products[i];
+                %>
+                  <tr> 
+                    <td><a href="/item/<%= item.id; %>"><img src="<%= item.images[0]; %>" alt="<%=  item.name ; %>" style="width:32px;"></a></td>
+                    <td>
+                        <a href="/item/<%= item.id; %>"><%= item.name; %></a>
+
+                        <div>
+                            <%  if (item.has_variants === true) { %>
+
+                                    <% for (var v_name in item.variantsDefinition){ %>
+                                        <span class="label label-primary" style="margin-right:5px">
+                                        <%= item.variant[v_name] %>
+                                    </span>
+                                    <% } %>
+                            <% } %>
+                            
+                        </div>
+                    </td>
+                    <td>
+                        <%= item.quantity; %>
+                    </td>
+                    <td><%=  item.price; %></td>
+
+                    <td><%= (item.price * item.quantity); %></td>
+                    
+                  </tr>
+              <% } %>
+                </tbody>
+              </table>
+            </div>
+
+            
+
+                
+                
+            </div>
+
+        </div>
+
+
+    </div>
+    <!-- /.container -->
+
+   
+    
+    <% include scripts %>
+   
+<% include footer %>

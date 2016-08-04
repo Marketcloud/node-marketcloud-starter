@@ -270,6 +270,7 @@
             cart_id : cart_id,
             shipping_id : $("input[name='shippingMethod']").val()
         }
+            console.log("Order",order);
         
             var form = $("<form method='POST' action='/checkout'></form>");
             var order_field = $("<input type='hidden' name='order'/>");
@@ -278,6 +279,7 @@
             var nonce_field = $("<input type='hidden' name='braintree_nonce'/>");
             nonce_field.val(JSON.stringify(braintree_nonce));
             form.append(nonce_field);
+
             form.submit();
 
     }

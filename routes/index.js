@@ -83,12 +83,26 @@ router.get('/checkout',function(req,res,next){
 
 router.post('/checkout',function(req,res,next){
   var mc = req.app.get('marketcloud');
-  return mc.orders.create(req.body)
+  var created_order = null;
+  return mc.orders.create(JSON.parse(req.body.order))
   .then(function(response){
-    res.send(response)
+    created_order = response;
+    //Creating the payment now
+    var payment = {
+      method : 'Braintree',
+      order_id : response.id,
+      nonce : 'fake-valid-nonce'
+    };
+    
+    return mc.payments.create(payment);
+  })
+  .then(function(response){
+    //The payment was ok
+    res.render('order_confirmed',{order : created_order})
   })
   .catch(function(error){
-    res.send(error)
+    console.log(error)
+    res.render('error')
   })
 })
 

@@ -23,7 +23,7 @@ if ('undefined' === typeof process.env.MARKETCLOUD_PUBLIC_KEY ||
 var mc = new Marketcloud.Client({
     public_key : process.env.MARKETCLOUD_PUBLIC_KEY,
     secret_key : process.env.MARKETCLOUD_SECRET_KEY
-})
+});
 
 app.locals.MARKETCLOUD_PUBLIC_KEY = process.env.MARKETCLOUD_PUBLIC_KEY;
 
