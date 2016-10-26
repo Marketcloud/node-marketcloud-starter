@@ -267,8 +267,8 @@
         var order = {
             shipping_address : the_address,
             billing_address : the_address,
-            cart_id : cart_id,
-            shipping_id : $("input[name='shippingMethod']").val()
+            cart_id : Number(cart_id),
+            shipping_id : Number($("input[name='shippingMethod']").val())
         }
             console.log("Order",order);
         
