@@ -1,4 +1,4 @@
-![Marketcloud](http://www.marketcloud.it/img/logo_1200.png)
+![Marketcloud](http://www.marketcloud.it/img/logo/new_with_text.png)
 # NodeJS + Marketcloud eCommerce starter
 NodeJS starter eCommerce project with ExpressJS and Marketcloud
 
@@ -36,3 +36,6 @@ Now you can run the app with
 ```
 npm start
 ```
+## Checkout configuration
+This app uses Braintree to handle payments, in order to accept payments using this app, remember to setup the Braintree integration in your Marketcloud Dashboard.
+More information here [Braintree integration for Marketcloud](https://www.marketcloud.it/documentation/guides/braintree)
