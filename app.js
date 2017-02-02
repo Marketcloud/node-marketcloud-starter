@@ -90,8 +90,8 @@ app.use(function(req,res,next){
 
     getCartPromise()
     .then(function(response){
-        req.app.locals.cart = response;
-        req.session.cart_id = response.id
+        req.app.locals.cart = response.data;
+        req.session.cart_id = response.data.id
         next()
     })  
     .catch(function(response){
@@ -106,7 +106,7 @@ app.use(function(req,res,next){
 app.use(function(req,res,next){
     mc.categories.list({})
     .then(function(response){
-        req.app.locals.categories = response;
+        req.app.locals.categories = response.data;
         next()
     })
     .catch(function(response){

@@ -19,15 +19,15 @@ router.get('/', function(req,res,next) {
   ]).then(function(results){
 
   	res.render('index', {  
-  		products : results[0],
-  		categories:results[1],
-  		brands:results[2]
+  		products : results[0].data,
+  		categories:results[1].data,
+  		brands:results[2].data
   	});
   }).catch(function(response){
-
+    console.log("Error",response);
   	res.render('error', {
-		            message: response.errors[0].message,
-		            error: response.errors[0],
+		            message: response.message,
+		            error: response,
 		            title: 'error'
 	});
   })
@@ -39,12 +39,13 @@ router.get('/item/:product_id',function(req,res,next){
 	var mc = req.app.get('marketcloud')
 	return mc.products.getById(req.params.product_id)
 			.then(function(response){
-				res.render('item', {product : response});
+				res.render('item', {product : response.data});
 			})
-      .catch(function(){
+      .catch(function(response){
+        console.log("Error",response);
   	     res.render('error', {
-		            message: response.errors[0].message,
-		            error: response.errors[0],
+		            message: response.message,
+		            error: response,
 		            title: 'error'
 		        });
       })
@@ -67,14 +68,18 @@ router.get('/checkout',function(req,res,next){
     return a+b;
   });
   
- return  mc.shippings.list({value : total_value})
+  return Marketcloud.Promise.all([
+      mc.shippings.list({value : total_value}),
+      mc.paymentMethods.list({})
+  ])
   .then(function(response){
-    res.render('checkout',{shippings : response})
+    res.render('checkout',{shippings : response[0].data, paymentMethods : response[1].data})
   })
-  .catch(function(){
+  .catch(function(response){
+        console.log("Error",response);
          res.render('error', {
-                message: response.errors[0].message,
-                error: response.errors[0],
+                message: response.message,
+                error: response,
                 title: 'error'
             });
       })
@@ -82,26 +87,41 @@ router.get('/checkout',function(req,res,next){
 })
 
 router.post('/checkout',function(req,res,next){
+
   var mc = req.app.get('marketcloud');
-  var created_order = null;
-  return mc.orders.create(JSON.parse(req.body.order))
+  var order = JSON.parse(req.body.order);
+
+  return mc.orders.create(order)
   .then(function(response){
-    created_order = response;
+
+    created_order = response.data;
     //Creating the payment now
+
+
+    // First of all, let's check which payment method was selected by the customer
+    if (created_order.hasOwnProperty('payment_method')){
+      // Then its a custom payment method
+      //TODO need refactor into promise composition
+      return new Promise((resolve,reject) => {
+        return resolve({});
+      });
+    }
+    // Otherwise we are using a built in method
+    // TODO must unify this.
     var payment = {
       method : 'Braintree',
-      order_id : response.id,
+      order_id : created_order.id,
       nonce : 'fake-valid-nonce'
     };
     
     return mc.payments.create(payment);
   })
   .then(function(response){
-    //The payment was ok
+    //The payment was ok or not required
     res.render('order_confirmed',{order : created_order})
   })
-  .catch(function(error){
-    console.log(error)
+  .catch(function(response){
+    console.log("Error",response);
     res.render('error')
   })
 })
@@ -122,15 +142,15 @@ router.get('/search',function(req,res,next){
   ]).then(function(results){
 
   	res.render('index', {  
-  		products : results[0],
-  		categories:results[1],
-  		brands:results[2]
+  		products : results[0].data,
+  		categories:results[1].data,
+  		brands:results[2].data
   	});
   }).catch(function(response){
-
+    console.log("Error",response);
   	res.render('error', {
-		            message: response.errors[0].message,
-		            error: response.errors[0],
+		            message: response.message,
+		            error: response,
 		            title: 'error'
 	});
   })
@@ -151,17 +171,16 @@ router.post('/login',function(req,res,next){
 
   return mc.users.authenticate(req.body.email,req.body.password)
   .then(function(response){
-    console.log("THEN",response)
     req.session.user = {
-      email : response.user.email,
-      id : response.user.id,
-      token : response.token
+      email : response.data.user.email,
+      id : response.data.user.id,
+      token : response.data.token
     };
     
     res.redirect('/')
   })
   .catch(function(response){
-    console.log("CATCH",response)
+    console.log("Error",response);
     res.render('login',{error : 'Invalid credentials'});
   })
 })
@@ -180,12 +199,12 @@ router.post('/signup',function(req,res,next){
   //You can add custom data to user
   return mc.users.create(user)
   .then(function(response){
-    console.log(response)
     res.render('login',{message : 'Your account was successfully created.'})
   })
   .catch(function(response){
-
-    res.render('signup',{error : 'An error has occurred'})
+    console.log("Error",response);
+    var error_message = response.message || 'An error has occurred';
+    res.render('signup',{error : error_message})
   })
 })
 

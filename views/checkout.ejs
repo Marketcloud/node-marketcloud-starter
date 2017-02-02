@@ -1,6 +1,11 @@
 <% include header %>
 
 
+<style type="text/css">
+    .payment_method_box {
+        display: none;
+    }
+</style>
 <div class="container-fluid" >
     
     <% if ('undefined' !== typeof error_message){ %>
@@ -140,11 +145,29 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">Payment informations</div>
                 <div class="panel-body">
-                   
-                        <form id="checkout" class="form">
+                    <div style="margin-bottom:20px;">
+                        <select class="form-control" id="selected_payment_method">
+                            <option value="">Select a payment option</option>
+                            <option value="BraintreeMethod">Braintree</option>
+                            <% for (var i =0; i< paymentMethods.length; i++) {
+                                var method = paymentMethods[i];
+                            %>
+                                <option value="<%= method.id%>"><%= method.name%></option>
+                            <% } %>
+                        </select>
+                    </div>
+                        <form id="BraintreeMethod" class="form payment_method_box">
                           <div id="payment-form"></div>
                          <input type="submit" id="braintree_button" class="btn btn-lg btn-primary" value="Complete checkout">
                         </form>
+
+                        <% for (var i =0; i< paymentMethods.length; i++) {
+                                var method = paymentMethods[i];
+                        %>
+                    <form id="<%= method.id%>" class="form payment_method_box">
+                        <input type="button" id="<%= method.id%>_button" class="btn btn-lg btn-primary" value="Complete checkout" onclick="checkout()">
+                    </form>
+                    <% } %>
             </div>
             
             
@@ -159,6 +182,30 @@
 <script src="https://js.braintreegateway.com/js/braintree-2.26.0.min.js"></script>
 <% include scripts %>
 <script type="text/javascript">
+
+
+
+
+
+    // This handles payment method changes
+    //
+    var updatePaymentForm = function(){
+        
+        var payment_method_name = $("#selected_payment_method").val();
+        if (payment_method_name === "")
+            return;
+        $(".payment_method_box").hide();
+        $(".payment_method_box#"+payment_method_name).show();
+
+    }
+
+    $("#selected_payment_method").change(updatePaymentForm);
+
+
+
+
+
+
     /*
     
         For this starter, we use Braintree
@@ -269,6 +316,10 @@
             billing_address : the_address,
             cart_id : Number(cart_id),
             shipping_id : Number($("input[name='shippingMethod']").val())
+        }
+        var selected_payment_method = $("#selected_payment_method").val();
+        if (selected_payment_method !== 'BraintreeMethod' && selected_payment_method !== 'StripeMethod'){
+            order.payment_method_id = Number($("#selected_payment_method").val());
         }
             console.log("Order",order);
         
