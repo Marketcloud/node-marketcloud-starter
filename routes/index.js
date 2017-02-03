@@ -13,7 +13,7 @@ router.get('/', function(req,res,next) {
   
 
   Marketcloud.Promise.all([
-  		mc.products.list({published : true}),
+  		mc.products.list({}),
   		mc.categories.list({}),
   		mc.brands.list({})
   ]).then(function(results){
@@ -35,67 +35,6 @@ router.get('/', function(req,res,next) {
 });
 
 
-
-router.get('/categories', function(req,res,next) {
-
-  var mc = req.app.get('marketcloud')
-
- Marketcloud.Promise.all([
-      mc.products.list({published : true}),
-      mc.categories.list({}),
-      mc.brands.list({})
-  ]).then(function(results){
-
-    res.render('categories', {  
-      products : results[0].data,
-      categories:results[1].data,
-      brands:results[2].data
-    });
-  }).catch(function(response){
-    console.log("Error",response);
-    res.render('error', {
-                message: response.message,
-                error: response,
-                title: 'error'
-  });
-  })
-
-  
-});
-
-router.get('/single-cat/:product_id', function(req,res,next) {
-
-  var mc = req.app.get('marketcloud')
-
-  
-
- Marketcloud.Promise.all([
-      mc.products.list({category_id : req.params.product_id}),
-      mc.categories.list({}),
-      mc.brands.list({})
-  ]).then(function(results){
-
-    res.render('single-cat', {  
-      products : results[0].data,
-      categories:results[1].data,
-      brands:results[2].data
-    });
-  }).catch(function(response){
-    console.log("Error",response);
-    res.render('error', {
-                message: response.message,
-                error: response,
-                title: 'error'
-  });
-  })
-
-  
-});
-
-
-
-
-
 router.get('/item/:product_id',function(req,res,next){
 	var mc = req.app.get('marketcloud')
 	return mc.products.getById(req.params.product_id)
@@ -111,8 +50,6 @@ router.get('/item/:product_id',function(req,res,next){
 		        });
       })
 })
-
-
 
 
 router.get('/checkout',function(req,res,next){
