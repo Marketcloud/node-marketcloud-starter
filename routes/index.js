@@ -13,7 +13,7 @@ router.get('/', function(req,res,next) {
   
 
   Marketcloud.Promise.all([
-  		mc.products.list({}),
+  		mc.products.list({published:true}),
   		mc.categories.list({}),
   		mc.brands.list({})
   ]).then(function(results){
@@ -133,10 +133,11 @@ router.get('/cart',function(req,res,next){
 
 
 router.get('/search',function(req,res,next){
-
+        var qry = req.query;
+	qry.published = true;
 	var mc = req.app.get('marketcloud')
 	return Marketcloud.Promise.all([
-  		mc.products.list(req.query),
+  		mc.products.list(qry),
   		mc.categories.list({}),
   		mc.brands.list({})
   ]).then(function(results){
