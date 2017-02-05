@@ -7,8 +7,11 @@
         <div class="row">
 
             <div class="col-lg-8 col-lg-offset-2">
+            <div class="panel">
+                <div style="padding:10px">
                 <h3>Shopping cart</h3>
                 <p>You have <%= cart.items.length; %> items in your cart.</p>
+                </div>
                 <div class="table-responsive">
               <table class="table">
                 <thead>
@@ -48,7 +51,11 @@
                     </td>
                     <td><%=  item.price; %></td>
                     <td><%= (item.price * item.quantity); %></td>
-                    <td><a href="#" class="btn btn-danger removeButton" data-product-id="<%= item.product_id; %>" data-variant-id="<%= item.variant_id; %>"><i class="fa fa-trash-o"></i></a></td>
+                    <td>
+                        <a href="#" class="btn btn-danger removeButton" data-product-id="<%= item.product_id; %>" data-variant-id="<%= item.variant_id; %>">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
                   </tr>
               <% } %>
                 </tbody>
@@ -57,14 +64,16 @@
 
             <div class="row">
                 <div class="col-xs-12 text-right">
+                    <div style="padding:10px">
                     <button class="btn btn-primary" id="updateCartButton">Update cart</button>
                     <a href="/checkout" class="btn btn-success btn-lg">Checkout</a>
+                    </div>
                 </div>
                
             </div>
 
                 
-                
+                </div>
             </div>
 
         </div>

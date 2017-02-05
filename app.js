@@ -30,6 +30,28 @@ app.locals.MARKETCLOUD_PUBLIC_KEY = process.env.MARKETCLOUD_PUBLIC_KEY;
 app.set('marketcloud',mc);
 
 
+app.use(function(req,res,next){
+    if (app.locals.config){
+        return next();
+    }
+
+    return mc.application.get()
+    .then(function(response){
+        app.locals.config = response.data[0];
+        next();
+        return null;
+    })
+    .catch(function(error){
+        console.log("Unable to load app settings");
+        next();
+        return null;
+    })
+
+
+})
+
+
+
 // view engine setup
 
 app.set('views', path.join(__dirname, 'views'));
@@ -76,6 +98,8 @@ app.use(function(req,res,next){
     next();
 })
 
+
+
 app.use(function(req,res,next){
 
 
@@ -92,12 +116,14 @@ app.use(function(req,res,next){
     .then(function(response){
         res.locals.cart = response.data;
         req.session.cart_id = response.data.id
-        return next();
+        next();
+        return null;
     })  
     .catch(function(response){
 
         console.log("Unable to create or retrieve a cart.")
-        return next(response)
+        next(response)
+        return null;
     })
     
 })
@@ -108,11 +134,13 @@ app.use(function(req,res,next){
     .then(function(response){
         res.locals.categories = response.data;
         next()
+        return null;
     })
     .catch(function(response){
         // We keep goin
         res.locals.categories = [];
-        next()
+        next(response);
+        return null;
     })
 })
 app.use('/', routes);

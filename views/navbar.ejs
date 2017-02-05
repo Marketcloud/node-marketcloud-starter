@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">Your Store</a>
+      <a class="navbar-brand" href="/"><%= config.name %></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -46,7 +46,7 @@
             <li><b class="block text-center">Your cart</b></li>
             <li class="divider"></li>
             <% if (cart.items.length === 0) { %>
-              <li>Your cart is still empty :(</li>
+              <li class="text-center">Your cart is still empty :(</li>
             <% } %>
             <%
               for (var j = 0; j< cart.items.length; j++) { 
@@ -72,7 +72,7 @@
               
               
               <li class="divider"></li>
-              <li><a class="text-center" href="/cart">View Cart</a></li>
+              <li><a class="text-center link" href="/cart">View Cart</a></li>
           </ul>
         </li>
         <li class="hidden-lg hidden-md">
