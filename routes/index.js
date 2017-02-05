@@ -54,7 +54,7 @@ router.get('/item/:product_id',function(req,res,next){
 
 router.get('/checkout',function(req,res,next){
   var mc = req.app.get('marketcloud');
-  var cart = req.app.locals.cart;
+  var cart = res.locals.cart;
 
   //Short-circuiting to cart view
   if (cart.items.length === 0)
@@ -159,7 +159,14 @@ router.get('/search',function(req,res,next){
 })
 
 
-
+router.get('/logout',function(req,res,next){
+  req.session.destroy(function(err){
+    if (err)
+      return next(err);
+    else
+      res.redirect('/');
+  })
+})
 router.get('/login',function(req,res,next){
   res.render('login');
 })
@@ -181,7 +188,6 @@ router.post('/login',function(req,res,next){
     res.redirect('/')
   })
   .catch(function(response){
-    console.log("Error",response);
     res.render('login',{error : 'Invalid credentials'});
   })
 })

@@ -71,7 +71,7 @@ app.use(express.static(path.join(__dirname, 'public/')));
 
 app.use(function(req,res,next){
     if (req.session.user) {
-        req.app.locals.user = req.session.user;
+        res.locals.user = req.session.user;
     }
     next();
 })
@@ -88,30 +88,30 @@ app.use(function(req,res,next){
         }
     }
 
-    getCartPromise()
+    return getCartPromise()
     .then(function(response){
-        req.app.locals.cart = response.data;
+        res.locals.cart = response.data;
         req.session.cart_id = response.data.id
-        next()
+        return next();
     })  
     .catch(function(response){
 
         console.log("Unable to create or retrieve a cart.")
-        next(response)
+        return next(response)
     })
     
 })
 
 
 app.use(function(req,res,next){
-    mc.categories.list({})
+    return mc.categories.list({})
     .then(function(response){
-        req.app.locals.categories = response.data;
+        res.locals.categories = response.data;
         next()
     })
     .catch(function(response){
         // We keep goin
-        req.app.locals.categories = [];
+        res.locals.categories = [];
         next()
     })
 })
