@@ -13,6 +13,7 @@ http://marketcloud-demo.herokuapp.com
 * Takes advantage of EJS templates
 * Boostrap3 based frontend plus some JQuery
 * Easily replace the small JQuery code with your favorite Javascript framework like React/Angular/Angular2
+* Built in Braintree payments (Credit card + Paypal) form
 
 ## Requirements
 You will need nodejs, npm and bower
@@ -39,3 +40,5 @@ npm start
 ## Checkout configuration
 This app uses Braintree to handle payments, in order to accept payments using this app, remember to setup the Braintree integration in your Marketcloud Dashboard.
 More information here [Braintree integration for Marketcloud](https://www.marketcloud.it/documentation/guides/braintree)
+
+You can also use custom payment methods of course. Ask us!
