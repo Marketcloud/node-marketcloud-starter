@@ -330,7 +330,8 @@
             var nonce_field = $("<input type='hidden' name='braintree_nonce'/>");
             nonce_field.val(JSON.stringify(braintree_nonce));
             form.append(nonce_field);
-
+            // Some browsers will refuse to submit if the form is not appended to the body
+            $("body").append(form);
             form.submit();
 
     }
