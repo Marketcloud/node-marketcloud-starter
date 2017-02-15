@@ -41,7 +41,7 @@
         <li><a href="/login">Login</a></li>
         <% } %>
         <li class="dropdown hidden-xs hidden-sm ">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="glyphicon glyphicon-shopping-cart"></span><%= cart.items.length; %> Cart<span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="glyphicon glyphicon-shopping-cart"></span> <span id="itemsInCart"> <%= cart.items.length; %></span> Cart<span class="caret"></span></a>
           <ul class="dropdown-menu dropdown-cart" role="menu">
             <li><b class="block text-center">Your cart</b></li>
             <li class="divider"></li>
@@ -57,10 +57,10 @@
                     <span class="item-left">
                         <img src="<%= item.images[0]; %>" style="max-width:50px;" />
                         <span class="item-info">
-                            <span><%= item.name; %></span>
+                            <span class="item-name"><%= item.name; %></span>
 
-                            <span><%= item.price; %>€</span>
-                            <span>x <%= item.quantity; %></span>
+                            <span class="item-price"><%= config.currency_code+""+item.price; %></span>
+                            <span class="item-quantity">x <%= item.quantity; %></span>
                         </span>
                     </span>
                    <!--  <span class="item-right">
@@ -73,6 +73,8 @@
               
               <li class="divider"></li>
               <li><a class="text-center link" href="/cart">View Cart</a></li>
+              <li class="divider"></li>
+              <li><a class="text-center link" href="/checkout">Checkout</a></li>
           </ul>
         </li>
         <li class="hidden-lg hidden-md">

@@ -12,7 +12,7 @@
             <div class="col-md-4 col-md-offset-2">
                 <div class="thumbnail">
                     <% if (product.hasOwnProperty('images')) { %>
-                            <img src="<%= product.images[0] %>" alt="" style="max-width:100%;">
+                            <img src="<%= product.images[0] %>" alt="" style="max-width:100%;" id="product_image">
                             <% } else {%>
                                 <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=200%C3%97200&w=400&h=800" alt="" style="max-width:100%;">
                     <% } %>
@@ -30,12 +30,16 @@
 
             <div class="col-md-4">
 
-                <div class="product-controls panel">
-                    <h3 class="price text-center">€ <%= product.price %></h3>
+                <div class="product-controls panel has_overlay">
+                    <div class="overlay">
+                        <div class="spinner"></div>
+                    </div>
+                    <h3 class="price text-center" id="price"><span class="currency"><%= config.currency_code %></span> <span id="amount"><%= product.price %></span></h3>
                     <% for(var k in product.variantsDefinition) { %>
-                        <div><b><%= k %></b></div>
+                        
                         <div class="form-group">
-                        <select class="form-control" id="variant_<%= k %>">
+                        <label><%= k %></label>
+                        <select class="form-control variant" id="variant_<%= k %>">
                             <% for(var i=0; i< product.variantsDefinition[k].length;i++) { %>
                             <option value="<%= product.variantsDefinition[k][i] %>"><%= product.variantsDefinition[k][i] %></option>
                         <% } %>
@@ -57,9 +61,9 @@
                 <div class="panel" style="padding:10px">
                 <h3>Description</h3>
                 <% if (product.description) { %>
-                <div><%- product.description %></div>
+                <div id="description"><%- product.description %></div>
                 <%} else {%>
-                <div>No description available</div>
+                <div id="description">No description available</div>
                 <%}%>
                 </div>
             </div>
@@ -110,7 +114,7 @@
 
         btn.html("Adding to cart")
         
-        if (product.has_variants) {
+        if (product.has_variants || product.type === 'product_with_variants') {
             
             payload.options = {};
 
@@ -122,21 +126,67 @@
 
         
         
-        
+        $(".overlay").show();
         marketcloud.carts.add(cart.id, [payload], function(err, data) {
+            $(".overlay").hide();
             if (err) {
                 console.log(err)
-                alert("An error has occurred");
+                toastr.warning("Item not available");
             } else{
-                alert("Item added to cart")
+                toastr.success("Item added to cart")
                 location.reload()
             }
         })
     }
 
+    function updateVariant(event){
+            
+        var variant = getVariantFromChoices();
+
+        $("#amount").text(variant.price_discount || variant.price);
+        if (variant.description)
+            $("#description").html(variant.description);
+        else
+            $("#description").html("<i>No description available</i>");
+
+        if (variant.images && variant.images.length > 0) {
+            $("#product_image").attr("src",variant.images[0]);
+        }
+    }
+    //Updating for the first price.
+    if (product.type === 'product_with_variants')
+        updateVariant();
+
+    // Return the variant corresponding to the current
+    // option choices
+    function getVariantFromChoices(){
+        var options = {}
+        for (var variant_name in product.variantsDefinition) {
+                var value = $("select#variant_" + variant_name).val();
+                options[variant_name] = value;
+        }
+
+        var matches= product.variants.filter(function(x){
+            var all_match = true;
+            for (var k in options){
+                if (x[k] !== options[k])
+                    all_match = false;
+            }
+            return all_match;
+        })
+
+        // Should only have 1 match
+        return matches[0];
+
+    }
+
+
+    
+
 
     $(document).ready(function(){
-        $("#addToCartButton").click(addToCart)
+        $("#addToCartButton").click(addToCart);
+        $("select.variant").change(updateVariant);
     })
 
 </script>

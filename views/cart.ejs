@@ -7,12 +7,12 @@
         <div class="row">
 
             <div class="col-lg-8 col-lg-offset-2">
-            <div class="panel">
-                <div style="padding:10px">
-                <h3>Shopping cart</h3>
-                <p>You have <%= cart.items.length; %> items in your cart.</p>
+            <div class="panel panel-primary has_overlay">
+                <div class="overlay">
+                    <div class="spinner"></div>
                 </div>
-                <div class="table-responsive">
+            <div class="panel-heading">Shopping cart</div>
+        <div class="table-responsive">
               <table class="table">
                 <thead>
                   <tr>
@@ -26,7 +26,7 @@
                 <% for ( var i=0; i< cart.items.length; i++) {
                     var item = cart.items[i];
                 %>
-                  <tr> 
+                  <tr data-product_id="<%= item.product_id; %>"  data-variant_id="<%= item.variant_id; %>"> 
                     <td><a href="/item/<%= item.id; %>"><img src="<%= item.images[0]; %>" alt="<%=  item.name ; %>" style="width:32px;"></a></td>
                     <td>
                         <a href="/item/<%= item.id; %>"><%= item.name; %></a>
@@ -47,14 +47,23 @@
                         <input type="number" 
                                 id="<%= "quantity_"+item.id+"_"+item.variant_id; %>"
                                 class="form-control"
+                                min="1"
                                 value="<%= item.quantity; %>">
                     </td>
-                    <td><%=  item.price; %></td>
-                    <td><%= (item.price * item.quantity); %></td>
+                    <%
+                        var the_price = item.price;
+                        if (item.price_discount){
+                            the_price = item.price_discount;
+                        }
+                    %>
+                    <td><%=  the_price %></td>
+                    <td><%= config.currency_code + " "+ String(the_price * item.quantity) %></td>
                     <td>
-                        <a href="#" class="btn btn-danger removeButton" data-product-id="<%= item.product_id; %>" data-variant-id="<%= item.variant_id; %>">
+                        <button class="btn btn-danger removeButton"
+                            data-product_id="<%= item.product_id; %>"
+                            data-variant_id="<%= item.variant_id; %>">
                             <span class="glyphicon glyphicon-trash"></span>
-                        </a>
+                        </button>
                     </td>
                   </tr>
               <% } %>
@@ -80,7 +89,10 @@
     <% } else { %>
         <div class="row">
              <div class="col-lg-8 col-lg-offset-2">
-                 <h4 style="text-align:center;">Your cart is empty :(</h4>
+                <div class="panel" >
+                    <h4 style="text-align:center;padding:20px;">Your cart is empty</h4>   
+                </div>
+                 
              </div>
         </div>
     <% } %>
@@ -95,6 +107,7 @@
         
         function updateCart() {
             var payload = [];
+            $(".overlay").show();
             cart.items.forEach(function(item){
                 payload.push({
                     product_id : item.product_id,
@@ -103,32 +116,63 @@
                 })
             })
             marketcloud.carts.update(cart.id,payload,function(err,data){
+                $(".overlay").hide();
                 if (err)
                     alert("An error has occurred.")
-                else
-                    alert("Cart updated")
+                else{
+                    toastr.success("Cart updated");
+                }
             })
         }
 
-        $("#updateCartButton").click(updateCart);
+        
+        
 
-        $(".removeButton").click(function(e){
-            var btn = $(e.target);
-            var product_id = btn.data('product-id');
-            var variant_id = btn.data('variant-id');
+        function removeFromCart(e){
+            var btn = $(this);
+            e.preventDefault();
+            e.stopPropagation();
 
+            // Getting data from the button, it contains which product we should remove
+            var product_id = Number(btn.data('product_id'));
+            var variant_id = Number(btn.data('variant_id'));
+
+            // let's build the payload
             var payload = [{
                 product_id : product_id,
                 variant_id : variant_id
             }]
-            
+
+            // Showing the overlay
+            $(".overlay").show();
+
+            //Invoking marketcloud
             marketcloud.carts.remove(cart.id,payload,function(err,data){
+                $(".overlay").hide();
                 if (err)
                     return alert("An error has occurred");
-                alert("Cart updated");
-                window.location.reload()
+                
+                toastr.success("Cart updated");
+
+                
+                window.setTimeout(function(){
+                    window.location.reload()
+                },1000)
+                
 
             })
+        }
+        
+
+
+
+        $(document).ready(function(){
+
+
+            // Mapping every single removeItem button to the remove function
+            $("button.removeButton").click(removeFromCart);
+
+            $("#updateCartButton").click(updateCart);
         })
        
     </script>

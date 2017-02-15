@@ -1,8 +1,14 @@
- <script src="/components/jquery/dist/jquery.min.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/components/marketcloud-js/dist/marketcloud.min.js"></script>
-    <script type="text/javascript">
-        marketcloud.public = "<%- MARKETCLOUD_PUBLIC_KEY %>";
-    </script>
+<script src="/components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/components/toastr/toastr.min.js"></script>
+<script type="text/javascript">
+	toastr.options = {"positionClass": "toast-bottom-right"}
+</script>
+<script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/components/marketcloud-js/dist/marketcloud.min.js"></script>
+<script type="text/javascript">
+var marketcloud = new Marketcloud.Client({
+	publicKey : "<%- MARKETCLOUD_PUBLIC_KEY %> "
+})
+marketcloud.baseUrl = 'http://localhost:5000';
+</script>

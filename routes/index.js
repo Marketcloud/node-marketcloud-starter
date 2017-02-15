@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var qs = require('querystring');
 var Marketcloud = require('marketcloud-node');
 
 
@@ -73,7 +73,11 @@ router.get('/checkout',function(req,res,next){
       mc.paymentMethods.list({})
   ])
   .then(function(response){
-    res.render('checkout',{shippings : response[0].data, paymentMethods : response[1].data})
+    res.render('checkout',{
+        shippings : response[0].data,
+        paymentMethods : response[1].data,
+        error : req.query.error
+    })
   })
   .catch(function(response){
         console.log("Error",response);
@@ -85,6 +89,8 @@ router.get('/checkout',function(req,res,next){
       })
   
 })
+
+
 
 router.post('/checkout',function(req,res,next){
 
@@ -121,8 +127,7 @@ router.post('/checkout',function(req,res,next){
     res.render('order_confirmed',{order : created_order})
   })
   .catch(function(response){
-    console.log("Error",response);
-    res.render('error')
+    res.redirect('/checkout?error='+qs.escape(response.message));
   })
 })
 
