@@ -234,12 +234,13 @@
 
     function loadClientToken() {
 
-        // 
-        marketcloud.payments.braintree.createClientToken(function(err,data){
+        
+        marketcloud.payments.braintree.createClientToken(function(err,response){
+            
             if (err) {
                 return alert("An error has occurred")
             } else {
-                braintree_client_token = data.clientToken;
+                braintree_client_token = response.data.clientToken;
                 
                 
                 // In this example, we use braintree as payment method
