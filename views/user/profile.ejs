@@ -1,0 +1,43 @@
+<% include ../header %>
+<!-- Page Content -->
+<div class="page">
+    <div class="container" style="margin-top:100px;">
+        <div class="row">
+            <div class="col-xs-12 col-md-8 col-md-offset-2">
+
+            		 <ul class="nav nav-pills">
+                  <li  class="active"><a href="/user/profile">Profile</a></li>
+                  <li><a href="/user/addresses">Addresses</a></li>
+                  <li><a href="/user/orders">Orders</a></li>
+                </ul>
+
+                <h2>Profile</h2>
+                <div class="panel">
+                	<div class="panel-body">
+		                	<div class="container-fluid">
+		                	<div class="row">
+		                		<div class="col-md-6">
+		                			<img src="<%= user.image_url || "https://www.marketcloud.it/img/user.png"%>" class="img-responsive">
+		                		</div>
+		                		<div class="col-md-6">
+		                			<div><b>Name</b></div>
+		                			<div><%= user.full_name || "Unknown" %></div>
+		                			<br/>
+		                			<div><b>Email</b></div>
+		                			<div><%= user.email %></div>
+		                			
+		                		</div>
+		                	</div>
+		                	</div>
+		                </div>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div><!-- /.container -->
+</div> <!-- /page -->
+    
+    
+<% include ../scripts %>
+<% include ../footer %>

@@ -1,0 +1,22 @@
+<a class="product panel" href="/item/<%= product.id %>">
+                           <% if (product.hasOwnProperty('images')) { %>
+                             <div class="image" style="background-image:url(<%= product.images[0] %>)">
+                             </div>
+                            <% } else {%>
+                             <div class="image" style="background-image:url(https://placeholdit.imgix.net/~text?txtsize=33&txt=200%C3%97200&w=600&h=600)">
+                                </div>  
+                           
+                            <% } %>
+                            <div class="info row">
+                                    
+                                    <div class="col-xs-12">
+                                        <div class="price"><%= config.currency_code %> <%= product.price %></div>
+                                    </div>
+                            </div>
+                            <div class="info row">
+                                    <div class="col-xs-12">
+                                    <div class="name"><%= product.name %></div>
+                                    </div>
+                                    
+                            </div>
+                        </a>

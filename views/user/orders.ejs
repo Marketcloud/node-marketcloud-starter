@@ -1,0 +1,72 @@
+<% include ../header %>
+<!-- Page Content -->
+<%
+	function getLabelClassByStatus(status){
+		switch (status) {
+			case "pending":
+				return "label label-info";
+			break;
+			case "processing":
+				return "label label-primary";
+			break;
+			case "failed":
+				return "label label-danger";
+			break;
+			case "completed":
+				return "label label-success";
+			break;
+			default:
+				return "label label-default";
+			break;
+		}
+	}
+%>
+
+<div class="page">
+    <div class="container" style="margin-top:100px;">
+        <div class="row">
+            <div class="col-xs-12 col-md-8 col-md-offset-2">
+
+           				<ul class="nav nav-pills">
+									  <li><a href="/user/profile">Profile</a></li>
+									  <li><a href="/user/addresses">Addresses</a></li>
+									  <li class="active"><a href="/user/orders">Orders</a></li>
+									</ul>
+           			
+
+                <h2>Orders</h2>
+
+                
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Orders</div>
+                        <div class="table-responsive">
+
+                            <table class="table table-striped">
+                               
+                           	<% for (var i = 0; i<orders.length; i++) {%>
+                           	 <tr>
+                                 
+                                 <td>#<%= orders[i]["id"]%></td>
+                                 <td><%= orders[i]["created_at"]%></td>
+                                 <td><%= config.currency_code+" "+orders[i]["total"]%></td>
+                                 <td><label class="<%= getLabelClassByStatus(orders[i].status) %>"><%= orders[i]["status"]%></label></td>
+                             </tr>
+                            <% } %>
+                            
+                                
+                            
+                             </table>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+        
+        
+    </div><!-- /.container -->
+</div> <!-- /page -->
+
+
+    
+<% include ../scripts %>
+<% include ../footer %>

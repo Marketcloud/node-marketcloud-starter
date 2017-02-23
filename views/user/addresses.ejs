@@ -1,0 +1,41 @@
+<% include ../header %>
+<!-- Page Content -->
+<div class="page">
+    <div class="container" style="margin-top:100px;">
+        <div class="row">
+            <div class="col-xs-12 col-md-8 col-md-offset-2">
+            <ul class="nav nav-pills">
+                                      <li><a href="/user/profile">Profile</a></li>
+                                      <li class="active"><a href="/user/addresses">Addresses</a></li>
+                                      <li><a href="/user/orders">Orders</a></li>
+                                    </ul>
+                <h2>Addresses</h2>
+
+                <% for (var i = 0; i<addresses.length; i++) {%>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Address #<%= addresses[i].id%></div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                               
+                           
+                            <% for (var k in addresses[i]){%>
+                             <tr>
+                                 <td><b><%= k %></b></td>
+                                 <td><%= addresses[i][k]%></td>
+                             </tr>
+                                
+                            <% } %>
+                             </table>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        
+        
+    </div><!-- /.container -->
+</div> <!-- /page -->
+    
+    
+<% include ../scripts %>
+<% include ../footer %>

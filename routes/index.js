@@ -184,11 +184,9 @@ router.post('/login',function(req,res,next){
 
   return mc.users.authenticate(req.body.email,req.body.password)
   .then(function(response){
-    req.session.user = {
-      email : response.data.user.email,
-      id : response.data.user.id,
-      token : response.data.token
-    };
+    
+    req.session.user = response.data.user;
+    req.session.user.token = response.data.token;
     
     res.redirect('/')
   })

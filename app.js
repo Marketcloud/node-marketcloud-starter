@@ -143,7 +143,17 @@ app.use(function(req,res,next){
         return null;
     })
 })
+
+function requireAuthentication(req,res,next){
+    if (req.session.user)
+        next();
+    else
+        res.redirect('/login')
+}
+
+
 app.use('/', routes);
+app.use('/user', requireAuthentication,require('./routes/user.route.js'));
 
 
 /// catch 404 and forward to error handler
