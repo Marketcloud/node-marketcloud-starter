@@ -6,7 +6,8 @@ NodeJS starter eCommerce project with ExpressJS and Marketcloud
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Marketcloud/node-marketcloud-starter)
 
-*Please note that after using the deploy to heroku button, if you run the heroku git:clone from the Heroku CLI you will get an empty repository. Read more [here](https://github.com/cobyism/ghost-on-heroku/issues/67)*
+*Please note that after using the deploy to heroku button, if you run the heroku git:clone from the Heroku CLI you will get an empty repository. Read more [here](https://github.com/cobyism/ghost-on-heroku/issues/67)*.
+
 *To avoid this, fork this project, clone it to your development machine and then deploy to heroku. You will be able to commit your changes to the GitHub repository and Heroku's continuous deployment will update your app automatically*
 ## Demo
 http://marketcloud-demo.herokuapp.com
