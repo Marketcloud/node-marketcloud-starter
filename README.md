@@ -13,12 +13,23 @@ NodeJS starter eCommerce project with ExpressJS and Marketcloud
 
 ## Demo
 http://marketcloud-demo.herokuapp.com
+
+## Table of contents
+1. [Features](#features)
+2. [Requirements](#requirements)
+3. [Installation](#installation)
+4. [Checkout configuration](#checkout-configuration)
+5. [Deploy to Herou](#deploying-to-heroku)
+
 ## Features
 * Built on NodeJS and ExpressJS, plus the Marketcloud node client
 * Takes advantage of EJS templates
 * Boostrap3 based frontend plus some JQuery
 * Easily replace the small JQuery code with your favorite Javascript framework like React/Angular/Angular2
 * Built in Braintree payments (Credit card + Paypal) form
+
+
+
 
 ## Requirements
 You will need nodejs, npm and bower
