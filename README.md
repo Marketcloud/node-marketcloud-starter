@@ -8,7 +8,9 @@ NodeJS starter eCommerce project with ExpressJS and Marketcloud
 
 *Please note that after using the deploy to heroku button, if you run the heroku git:clone from the Heroku CLI you will get an empty repository. Read more [here](https://github.com/cobyism/ghost-on-heroku/issues/67)*.
 
-*To avoid this, fork this project, clone it to your development machine and then deploy to heroku. You will be able to commit your changes to the GitHub repository and Heroku's continuous deployment will update your app automatically*
+*To avoid this,clone this project to your development machine, then add Heroku as Git remote. You will be able to commit your changes to the GitHub repository and Heroku's continuous deployment will update your app automatically. [You can follow these steps](#deploying-to-heroku)* 
+
+
 ## Demo
 http://marketcloud-demo.herokuapp.com
 ## Features
@@ -45,3 +47,25 @@ This app uses Braintree to handle payments, in order to accept payments using th
 More information here [Braintree integration for Marketcloud](https://www.marketcloud.it/documentation/guides/braintree)
 
 You can also use custom payment methods of course. Ask us!
+
+
+## Deploying to Heroku
+
+If you used the "deploy to heroku" button, and you run the command `heroku git:clone appname` from the Heroku CLI you will get an empty repository. Read more [here](https://github.com/cobyism/ghost-on-heroku/issues/67).
+
+To use this starter project with Heroku, follow these steps:
+
+1. After you clicked the deploy to heroku button and you have your new app on heroku, clone this repository on your local machine. To do so, open a terminal and run `git clone https://github.com/Marketcloud/node-marketcloud-starter`
+2. CD into the directory `cd node-marketcloud-starter`
+3. Add your Heroku app remote to the local repository by running your terminal `git remote add heroku https://git.heroku.com/your-app-name.git` . Remember to replace your-app-name with your Heroku app name.
+4. Add your modifications, git add  and commit your changes
+5. git push *heroku* master
+```
+git clone https://github.com/Marketcloud/node-marketcloud-starter
+cd node-marketcloud-starter
+git remote add heroku https://git.heroku.com/your-app-name.git
+# Now you can edit the project as you want
+git add myfile.js
+git commit -m 'Added my modifications to Marketcloud starter project'
+git push heroku master
+```
