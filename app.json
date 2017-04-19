@@ -2,7 +2,7 @@
   "name": "Node.js Marketcloud starter",
   "description": "A barebones Node.js app using Express 4 and Marketcloud",
   "repository": "https://github.com/Marketcloud/node-marketcloud-starter",
-  "logo": "https://marketcloudstatic01.blob.core.windows.net/images/logo_squared_dark_blue_2.png",
+  "logo": "https://marketcloudstatic01.blob.core.windows.net/website-v2/logo-v2.1-centered-padding.png",
   "keywords": ["node", "express", "marketcloud", "ecommerce"],
   "env": {
     "MARKETCLOUD_PUBLIC_KEY": {
